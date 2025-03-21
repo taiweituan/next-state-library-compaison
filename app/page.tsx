@@ -1,6 +1,5 @@
 import { Metadata } from "next"
 import { Button } from "components/Button/Button"
-
 import { LP_GRID_ITEMS } from "lp-items"
 
 export const metadata: Metadata = {
@@ -34,6 +33,9 @@ export default function Web() {
               Experience rapid UI development, AI-powered code reviews, and an extensive suite of tools for a smooth and
               enjoyable development process.
             </p>
+            <Button className="mr-3" href={"/todo"}>
+              To Do Page
+            </Button>
             <Button href="https://github.com/Blazity/next-enterprise" className="mr-3">
               Get started
             </Button>
