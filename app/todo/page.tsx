@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
+import Instruction from "components/Instruction/Instruction"
 import UserProvider, { useUserConfig } from "context/theme/context"
 
 interface Todo {
@@ -19,16 +20,19 @@ const ThemeToggle: React.FC = () => {
   const { theme } = state
   const { setUserConfig } = dispatch
   return (
-    <button
-      onClick={() =>
-        setUserConfig((prevState) => {
-          const { theme } = prevState
-          return { ...prevState, theme: theme === "light" ? "dark" : "light" }
-        })
-      }
-    >
-      Switch to <b>{theme === "light" ? "🌒 Dark" : "☀️ Light"}</b> Mode
-    </button>
+    <div className="mb-4">
+      <button
+        className="cursor-pointer rounded px-4 py-2 hover:bg-gray-200"
+        onClick={() =>
+          setUserConfig((prevState) => {
+            const { theme } = prevState
+            return { ...prevState, theme: theme === "light" ? "dark" : "light" }
+          })
+        }
+      >
+        Switch to <b>{theme === "light" ? "🌒 Dark" : "☀️ Light"}</b> Mode
+      </button>
+    </div>
   )
 }
 
@@ -129,6 +133,7 @@ function Page() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-80 rounded-lg bg-white p-6 shadow-lg">
+        <Instruction />
         <h1 className="mb-4 text-2xl font-bold">Todo App</h1>
         <UserProvider>
           <User />

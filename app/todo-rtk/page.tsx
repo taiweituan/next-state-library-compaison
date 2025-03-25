@@ -3,6 +3,7 @@
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { useRef, useState } from "react"
 import { Provider, useDispatch, useSelector } from "react-redux"
+import Instruction from "components/Instruction/Instruction"
 
 /**
  * Best Practice
@@ -100,9 +101,14 @@ const ThemeToggle: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
   const theme = useSelector((state: RootState) => state.theme.theme)
   return (
-    <button onClick={() => dispatch(themeSlice.actions.setTheme(theme === "light" ? "dark" : "light"))}>
-      Switch to <b>{theme === "light" ? "🌒 Dark" : "☀️ Light"}</b> Mode
-    </button>
+    <div className="mb-4">
+      <button
+        className="cursor-pointer rounded px-4 py-2 hover:bg-gray-200"
+        onClick={() => dispatch(themeSlice.actions.setTheme(theme === "light" ? "dark" : "light"))}
+      >
+        Switch to <b>{theme === "light" ? "🌒 Dark" : "☀️ Light"}</b> Mode
+      </button>
+    </div>
   )
 }
 
@@ -193,6 +199,7 @@ function Page() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-80 rounded-lg bg-white p-6 shadow-lg">
+        <Instruction />
         <h1 className="mb-4 text-center text-2xl font-bold">Todo App Zustand</h1>
         <Provider store={store}>
           <User />
