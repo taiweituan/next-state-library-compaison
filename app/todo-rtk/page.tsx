@@ -76,7 +76,7 @@ const todoSlice = createSlice({
 })
 
 // ! Combine the slices together with `combineStores` store.
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     theme: themeSlice.reducer,
     todo: todoSlice.reducer,
@@ -85,8 +85,8 @@ export const store = configureStore({
 
 // ! Give it a type so that TypeScript knows about the store's state
 // Not that intuitive unfortunately 😮‍💨
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+type RootState = ReturnType<typeof store.getState>
+type AppDispatch = typeof store.dispatch
 
 const ThemeToggle: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
