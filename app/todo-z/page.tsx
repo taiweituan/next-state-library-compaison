@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react"
 import { create, StateCreator } from "zustand" // import cost is extremely smol
-import UserProvider from "app/context/theme/context"
 
 /**
  * Best Practices https://tkdodo.eu/blog/working-with-zustand
@@ -20,6 +19,7 @@ interface TodoState {
   deleteTodo: (id: number) => void
 }
 /**
+ * **Store Creation**
  * Create slices before creating the store.
  * See Slice Pattern: https://zustand.docs.pmnd.rs/guides/typescript#slices-pattern
  *

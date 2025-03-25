@@ -26,24 +26,19 @@ export default function Web() {
         <div className="mx-auto grid max-w-(--breakpoint-xl) px-4 py-8 text-center lg:py-16">
           <div className="mx-auto place-self-center">
             <h1 className="mb-4 max-w-2xl text-4xl leading-none font-extrabold tracking-tight md:text-5xl xl:text-6xl dark:text-white">
-              Next.js Enterprise Boilerplate
+              State Management Libraries Comparison by Taiwei
             </h1>
             <p className="mb-6 max-w-2xl font-light text-gray-500 md:text-lg lg:mb-8 lg:text-xl dark:text-gray-400">
-              Jumpstart your enterprise project with our feature-packed, high-performance Next.js boilerplate!
-              Experience rapid UI development, AI-powered code reviews, and an extensive suite of tools for a smooth and
-              enjoyable development process.
+              A comparison of state management libraries in React using the same Todo app.
             </p>
             <Button className="mr-3" href={"/todo"}>
-              To Do Page
+              Todo Page
             </Button>
-            <Button href="https://github.com/Blazity/next-enterprise" className="mr-3">
-              Get started
+            <Button className="mr-3" href={"/todo-rtk"}>
+              Todo Page RTK
             </Button>
-            <Button
-              href="https://vercel.com/new/git/external?repository-url=https://github.com/Blazity/next-enterprise"
-              intent="secondary"
-            >
-              Deploy Now
+            <Button className="mr-3" href={"/todo-z"}>
+              Todo Page Zustand
             </Button>
           </div>
         </div>

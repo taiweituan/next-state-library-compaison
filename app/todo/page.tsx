@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import UserProvider, { useUserConfig } from "app/context/theme/context"
+import UserProvider, { useUserConfig } from "context/theme/context"
 
 interface Todo {
   text: string
