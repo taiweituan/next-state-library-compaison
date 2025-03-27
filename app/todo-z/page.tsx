@@ -2,9 +2,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 import { create, StateCreator } from "zustand" // import cost is extremely smol
+import { devtools } from "zustand/middleware"
 import BlogPosts from "app/todo-z/component/JobBoard/JobBoard"
 import Instruction from "components/Instruction/Instruction"
-import { devtools } from "zustand/middleware"
 
 const queryClient = new QueryClient()
 
