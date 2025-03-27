@@ -1,9 +1,37 @@
 "use client"
 
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { useRef, useState } from "react"
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { random } from "lodash"
+import { useEffect, useRef, useState } from "react"
 import { Provider, useDispatch, useSelector } from "react-redux"
 import Instruction from "components/Instruction/Instruction"
+
+const RANDOM_NUM = random(100)
+const TODO_API_URL = "https://dummyjson.com/todos"
+type TodoApiItem = { id: number; todo: string; completed: boolean; userId: number }
+type TodoApiResponse = {
+  todos: TodoApiItem[]
+  total: number
+  skip: number
+  limit: number
+}
+const todoApi = createApi({
+  reducerPath: "todoApi",
+  baseQuery: fetchBaseQuery({ baseUrl: TODO_API_URL }),
+  endpoints: (build) => ({
+    getTodos: build.query<TodoApiResponse, { limit: number; skip: number }>({
+      query: (arg) => ({
+        url: ``,
+        params: {
+          limit: arg.limit,
+          skip: arg.skip,
+        },
+      }),
+    }),
+  }),
+})
+const { useGetTodosQuery } = todoApi
 
 /**
  * Best Practice
@@ -23,6 +51,7 @@ interface Todo {
 interface TodoState {
   todos: Todo[]
   addTodo: (text: string) => void
+  addTodos: (todos: TodoApiItem[]) => void
   toggleTodo: (id: number) => void
   deleteTodo: (id: number) => void
 }
@@ -66,7 +95,16 @@ const todoSlice = createSlice({
     addTodo: (state, action: PayloadAction<string>) => {
       return {
         ...state,
-        todos: [...state.todos, { id: Date.now(), text: action.payload, completed: false }],
+        todos: [...state.todos, { id: Date.now() + random(1000), text: action.payload, completed: false }],
+      }
+    },
+    addTodos: (state, action: PayloadAction<TodoApiItem[]>) => {
+      const retroFitTodos = action.payload.map((todo) => {
+        return { id: Date.now() + random(1000), text: todo.todo, completed: false }
+      })
+      return {
+        ...state,
+        todos: [...retroFitTodos, ...state.todos],
       }
     },
     toggleTodo: (state, action: PayloadAction<number>) => {
@@ -89,7 +127,9 @@ const store = configureStore({
   reducer: {
     theme: themeSlice.reducer,
     todo: todoSlice.reducer,
+    [todoApi.reducerPath]: todoApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(todoApi.middleware),
 })
 
 // ! Give it a type so that TypeScript knows about the store's state
@@ -150,7 +190,7 @@ const TodoList: React.FC<{ todos: Todo[] }> = ({ todos }) => {
             todo.completed ? "text-gray-400 line-through" : ""
           }`}
         >
-          <span onClick={() => dispatch(todoSlice.actions.toggleTodo(todo.id))} className="cursor-pointer">
+          <span onClick={() => dispatch(todoSlice.actions.toggleTodo(todo.id))} className="cursor-pointer text-left">
             {todo.text}
           </span>
           <button
@@ -173,7 +213,6 @@ const Todo = () => {
   //   select only necessary state so it doesn't cause re-render when other unrelated state(s) change
   const dispatch = useDispatch<AppDispatch>()
   const todos = useSelector((state: RootState) => state.todo.todos)
-
   const inputRef = useRef<HTMLInputElement>(null)
   const handleAddTodo = () => {
     if (inputRef.current && inputRef.current.value.trim()) {
@@ -181,6 +220,17 @@ const Todo = () => {
       inputRef.current!.value = ""
     }
   }
+  const { data, status, isLoading, isFetching, isSuccess } = useGetTodosQuery({ limit: 5, skip: RANDOM_NUM })
+  console.log({ data, status, isLoading, isFetching, isSuccess })
+
+  useEffect(() => {
+    if (todos.length > 0) return
+    if (!isLoading && data && data.todos.length > 0) {
+      dispatch(todoSlice.actions.addTodos(data.todos))
+    }
+  }, [data, status, dispatch, isLoading])
+
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <>
@@ -200,7 +250,7 @@ function Page() {
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-80 rounded-lg bg-white p-6 shadow-lg">
         <Instruction />
-        <h1 className="mb-4 text-center text-2xl font-bold">Todo App Zustand</h1>
+        <h1 className="mb-4 text-center text-2xl font-bold">Todo App RTK</h1>
         <Provider store={store}>
           <User />
           <ThemeToggle />
