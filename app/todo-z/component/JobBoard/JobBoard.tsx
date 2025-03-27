@@ -62,7 +62,7 @@ const useFetchBlogPosts = ({ page = 1, skip = 0 }) => {
 }
 
 export default function BlogPosts() {
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(0)
 
   const { data, isLoading, isError } = useFetchBlogPosts({ page, skip: page })
 
