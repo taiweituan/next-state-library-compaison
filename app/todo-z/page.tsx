@@ -1,8 +1,11 @@
 "use client"
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 import { create, StateCreator } from "zustand" // import cost is extremely smol
+import BlogPosts from "app/todo-z/component/JobBoard/JobBoard"
 import Instruction from "components/Instruction/Instruction"
+
+const queryClient = new QueryClient()
 
 /**
  * Best Practices https://tkdodo.eu/blog/working-with-zustand
@@ -170,12 +173,15 @@ const Todo = () => {
 function Page() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-80 rounded-lg bg-white p-6 shadow-lg">
-        <Instruction />
-        <h1 className="mb-4 text-center text-2xl font-bold">Todo App Zustand</h1>
-        <User />
-        <ThemeToggle />
-        <Todo />
+      <div className="w-140 rounded-lg bg-white p-6 shadow-lg">
+        <QueryClientProvider client={queryClient}>
+          <Instruction />
+          <h1 className="mb-4 text-center text-2xl font-bold">Todo App Zustand</h1>
+          <User />
+          <ThemeToggle />
+          <Todo />
+          <BlogPosts />
+        </QueryClientProvider>
       </div>
     </div>
   )
