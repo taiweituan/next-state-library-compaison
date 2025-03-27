@@ -4,6 +4,7 @@ import { useRef, useState } from "react"
 import { create, StateCreator } from "zustand" // import cost is extremely smol
 import BlogPosts from "app/todo-z/component/JobBoard/JobBoard"
 import Instruction from "components/Instruction/Instruction"
+import { devtools } from "zustand/middleware"
 
 const queryClient = new QueryClient()
 
@@ -64,10 +65,12 @@ const createTodoSlice: StateCreator<TodoState> = (set) => ({
   deleteTodo: (id: number) => set((state) => ({ todos: state.todos.filter((todo) => todo.id !== id) })),
 })
 // Combine the slices together with `create` store.
-const useBoundedTodoStore = create<ThemeState & TodoState>((...a) => ({
-  ...createTodoSlice(...a),
-  ...createThemeSlice(...a),
-}))
+const useBoundedTodoStore = create<ThemeState & TodoState>()(
+  devtools((...a) => ({
+    ...createTodoSlice(...a),
+    ...createThemeSlice(...a),
+  }))
+)
 
 const ThemeToggle: React.FC = () => {
   const theme = useBoundedTodoStore((state) => state.theme)
